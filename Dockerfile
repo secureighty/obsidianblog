@@ -1,3 +1,5 @@
+ENV npm_config_cache=~/npmcachelmaoplzwork
+
 FROM node:22-slim AS builder
 WORKDIR /usr/src/app
 COPY package.json .
