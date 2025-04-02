@@ -1,10 +1,10 @@
 Hey folks,
 
-I've been working on getting my OSCP and that means drilling HackTheBox. A few months ago, I found myself rabbit-holeing an easy box and it paid off. Now that the box is retired, I wanna share the trick I used. 
+I've been working on getting my OSCP and that means drilling HackTheBox. A few months ago, I found myself rabbit-holeing an easy box and it paid off. Now that the box is retired, I want to share the trick I used. 
 
 Sightless is a Box sporting SQLPad and Froxlor. Cracking SQLPad was easy enough and got me shell access as the user `michael`. 
 
-According to the official writeup here, once you're on the box as `michael`, you're supposed to netstat for local ports and find 8080 for privesc. I was going about privesc recon saw that I needed to target the "john" account. `ps -aux | grep john` yielded quite a few interesting processes, and I didn't even need netstat to see that some dynamic ports were open (see `--port=34395` below)
+According to the official writeup here, once you're on the box as `michael`, you're supposed to netstat for local ports and find 8080 for privesc. I was going about privesc recon and I saw that I needed to target the "john" account. `ps -aux | grep john` yielded quite a few interesting processes, and I didn't even need netstat to see that some dynamic ports were open (see `--port=34395` below)
 ![[Pasted image 20250401160249.png]]
 
 Doing some digging, I found a [blogpost](https://www.gabriel.urdhr.fr/2021/08/16/chromedriver-cross-origin-request-forgery-rce/) from 2021 referencing a [quirk](https://issues.chromium.org/issues/40052697) (and I say quirk rather than vulnerability because the devs have marked this "won't fix") in chromium which you can use to get arbitrary code execution if and only if you're already on a box.
