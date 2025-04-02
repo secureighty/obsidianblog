@@ -6,11 +6,16 @@ RUN npm ci
 COPY . .
 RUN npx quartz build
 
-FROM httpd:2.4
+# Use a lightweight Node.js base image for serving
+FROM node:22-slim AS runner
+WORKDIR /usr/src/app
 
-RUN sed -i 's/80/8080/g' /usr/local/apache2/conf/httpd.conf
+# Install a lightweight web server
+RUN npm install -g http-server
 
-COPY --from=builder /usr/src/app/public /usr/local/apache2/htdocs/
+# Copy built files from builder stage
+COPY --from=builder /usr/src/app/public /usr/src/app/public
 
-RUN chmod -R 777 /usr/local/apache2/htdocs/
-RUN chmod -R 777 /usr/local/apache2/logs/
+# Expose port 8080 and run the server
+EXPOSE 8080
+CMD ["http-server", "public", "-p", "8080"]
